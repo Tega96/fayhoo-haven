@@ -1,6 +1,7 @@
 import HeroSection from "./HeroSection"
 import FeatureSection from './FeatureSection';
 import DiscoverSection from "./DiscoverSection";
+import CallToAction from "./CallToAction";
 
 const page = () => {
   return (
@@ -8,6 +9,7 @@ const page = () => {
       <HeroSection />
       <FeatureSection />
       <DiscoverSection />
+      <CallToAction />
     </div>
   )
 }

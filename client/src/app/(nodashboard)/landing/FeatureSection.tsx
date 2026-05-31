@@ -25,7 +25,7 @@ const FeatureSection = () => {
   return (
     <motion.div
         initial="hidden"
-        whileInView={"visible"}
+        whileInView="visible"
         viewport={{ once: true }}
         variants={{containerVariants}}
         className='py-24 px-6 sm:px-8 lg:px-12 xl:px-16 bg-white'
@@ -37,8 +37,8 @@ const FeatureSection = () => {
             >
                 Quickly find the home you want using our effective search filters!
             </motion.h2>
-            <div className="grid grid-cols-1 md:grid-cols-3">
-                {[0,1,2].map((index) => (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 xl:gap-16">
+                {[0, 1, 2].map((index) => (
                     <motion.div key={index} variants={itemVariants}>
                         <FeatureCard 
                             imageSrc={`/landing-search${3 - index}.png`}
@@ -57,7 +57,7 @@ const FeatureSection = () => {
                                 
                                 ][index]
                             }
-                            linkText={ ['Explore', "Search", 'Discover'][index]}
+                            linkText={['Explore', "Search", 'Discover'][index]}
                             linkHref={['/explore', '/search', '/discover'][index]}
                         />
                     </motion.div>
@@ -82,7 +82,7 @@ interface FeatureCardProps {
 const FeatureCard = ({imageSrc, title, description, linkText, linkHref}: FeatureCardProps) => {
     return (
         <div className="text-center">
-            <div className="p-4 rounded-xl h-48 flex justify-center items-center">
+            <div className="p-4 rounded-xl mb-4 flex justify-center items-center h-48">
                 <Image 
                     src={imageSrc}
                     width={400}
@@ -96,10 +96,10 @@ const FeatureCard = ({imageSrc, title, description, linkText, linkHref}: Feature
             <Link
                 href={linkHref}
                 className="inline-block border border-gray-300 rounded px-4 py-2 hover:bg-gray-100"
+                scroll={false}
             >
                 {linkText}
             </Link>
-
         </div>
     )
 }

@@ -40,7 +40,7 @@ const HeroSection = () => {
                     />
                     <Button 
                         onClick={() => {}}
-                        className='bg-secondary-500 rounded-none text-white border-none h-12 px-5 rounded-r-xl hover:bg-secondary-600'
+                        className='bg-secondary-500 rounded-none text-white font-bold border-none h-12 px-5 rounded-r-xl hover:bg-secondary-600'
                     >Search</Button>
                 </div>
             </div>

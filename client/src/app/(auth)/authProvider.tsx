@@ -1,6 +1,7 @@
+
 import React from 'react';
 import { Amplify } from 'aws-amplify';
-import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
+import { Authenticator, Heading, Radio, RadioGroupField, useAuthenticator, View } from '@aws-amplify/ui-react';
 
 Amplify.configure({
     Auth: {
@@ -11,11 +12,125 @@ Amplify.configure({
     }
 });
 
+const components = {
+    Header () {
+        return (
+            <View className="mt-4 mb-7">
+                <Heading level={3} className="!text-2xl !font-bold">
+                    Fa
+                    <span className="text-secondary-500 font-light hover:!text-primary-300">
+                        Yhoo
+                    </span>
+                </Heading>
+                <p className="text-muted-foreground mt-2">
+                    <span className="font-bold">Welcome!</span>
+                    please sign in to continue
+                </p>
+            </View>
+        )
+    },
+    SignIn: {
+        Footer() {
+            const {toSignUp} = useAuthenticator();
+            return (
+                <View className="text-center mt-4">
+                    <p className="text-muted-foreground">Dont&apos;t have an account?{" "}</p>
+                    <button
+                        onClick={toSignUp} 
+                        className="text-primary hover:underline bg-transparent border-none p-0"
+                    >Sign up here</button>
+                </View>
+            )
+        }
+    },
+    SignUp: {
+        FormFields() {
+            const { validationErrors } = useAuthenticator();
+
+            return (
+                <>
+                    <Authenticator.SignUp.FormFields /> 
+                    <RadioGroupField
+                        legend="Role"
+                        name="custom:role"
+                        errorMessage={validationErrors?.["custom:role"]}
+                        hasError={!!validationErrors?.["custom:role"]}
+                        isRequired
+                    >
+                        <Radio value="tenant">Tenant</Radio>
+                        <Radio value="manager">Manager</Radio>
+                    </RadioGroupField>
+                </>
+            )
+        },
+        Footer () {
+            const {toSignIn} = useAuthenticator();
+            return (
+                <View className="text-center mt-4">
+                    <p className="text-muted-foreground">
+                        Already have an account?{" "}
+                        <button
+                            onClick={toSignIn}
+                            className="text-primary hover:underline bg-transparent border-none p-0"
+                        >
+                            Sign in
+                        </button>
+                    </p>
+                </View>
+            )
+        }
+    }
+}
+
+const formFields = {
+    signIn: {
+        username: {
+            placeholder: "Enter your email",
+            label: "Email",
+            isRequired: true,
+        },
+        password: {
+            placeholder: "Enter your password",
+            label: "Password",
+            isRequired: true,
+        }
+    },
+    signUp: {
+        username: {
+            order: 1,
+            placeholder: "Enter your user name",
+            label: "Username",
+            required: true
+        },
+        email: {
+            order: 2,
+            placeholder: "Please, enter your email",
+            label: "Email",
+            required: true,
+        },
+        password: {
+            order: 3,
+            placeholder: "Enter your password",
+            label: "Password",
+            isRequired: true,
+        },
+        confirm_password: {
+            order: 4,
+            placeholder: "Confirm your password",
+            label: "Password",
+            isRequired: true,
+        }
+    }   
+}
+
 const Auth = ({ children }: {children: React.ReactNode}) => {
     const { user } = useAuthenticator((context) => [context.user]);
   return (
     <div className="h-full">
-        <Authenticator>
+        <Authenticator
+            components={components}
+            formFields={formFields}
+        >
             {() => <>{children}</>}
         </Authenticator>
     </div>

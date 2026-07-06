@@ -1,7 +1,5 @@
 import type { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client/extension";
-
-const prisma = new PrismaClient();
+import { prisma } from '../lib/prisma.js'
 
 // GET /manager/123
 export const getManager = async (req: Request, res: Response): Promise<void> => {

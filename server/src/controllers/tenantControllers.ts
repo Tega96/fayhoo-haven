@@ -1,8 +1,7 @@
 import type {Request, Response} from 'express'
-import { PrismaClient } from '@prisma/client/extension'
+import { prisma } from '../lib/prisma.js'
 import { wktToGeoJSON} from '@terraformer/wkt';
 
-const prisma = new PrismaClient();
 
 // GET localhost:300/tenants/1234
 export const getTenant = async (req: Request, res: Response): Promise<void> => {

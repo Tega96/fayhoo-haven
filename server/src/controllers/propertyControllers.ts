@@ -1,7 +1,8 @@
 import type { Request, Response } from "express";
-import { Prisma, PrismaClient } from "@prisma/client/extension";
-
-const prisma = new PrismaClient();
+import { prisma } from '../lib/prisma.js'
+import { Prisma } from "../generated/prisma/client.js";
+import { wktToGeoJSON } from "@terraformer/wkt";
+import { Bucket$ } from "@aws-sdk/client-s3";
 
 // GET /properties
 export const getProperties = async (req: Request, res: Response): Promise<void> => {
@@ -72,7 +73,7 @@ export const getProperties = async (req: Request, res: Response): Promise<void> 
             );
         };
 
-        if (availableForm && availableFrom !== "any") {
+        if (availableForm && availableForm !== "any") {
             const availableFormDate = typeof availableForm === "string" ? availableForm : null;
             if (availableFormDate) {
                 const date = new Date(availableFormDate);
@@ -134,3 +135,65 @@ export const getProperties = async (req: Request, res: Response): Promise<void> 
     }
 }
 
+// GET /property/:id
+export const getProperty = async (req: Request, res: Response):Promise<void> => {
+    try {
+        const { id } = req.params;
+
+        const property = prisma.property.findUnique({
+            where: {id},
+            inclued: {
+                location: true,
+            }
+        });
+
+        if (!property) {
+            res.status(404).json({ message: `Property not found`})
+        } 
+        const coordinates: { coordinates: string }[] = 
+            await prisma.$queryRaw`SELECT ST_asText(coordinates) as coordinates from "Location" where id = ${property.location.id}`;
+        
+        const geoJSON: any = wktToGeoJSON(coordinates[0]?.coordinates || "");
+        const longitude = geoJSON.coordinates[0];
+        const latitude = geoJSON.coordinates[1];
+
+        const propertyWithCoordinates = {
+            ...property,
+            loaction: {
+                ...property.location,
+                coordinates: {
+                    longitude,
+                    latitude,
+                }
+            }
+        };
+
+        res.status(200).json(propertyWithCoordinates)
+    } catch (error: any) {
+        res.status(500).json({ message: `Error retrieving property ${error.message}`})
+    }
+    
+}
+
+
+export const createProperty = async (
+    req: Request,
+    res: Response
+): Promise<void> => {
+    try {
+        const files = req.files as Express.Multer.File[];
+        const {
+            address,
+            city, 
+            state,
+            country,
+            postalCode,
+            managerCognitoId,
+            ...propertyData
+        } = req.body;
+
+
+    } catch (error: any) {
+        res.status(500).json({message: `Error creating Property ${error.message}`})
+    }
+}

@@ -1,6 +1,6 @@
 import 'dotenv/config'
-import { Prisma, PrismaClient } from "../src/generated/prisma/client.js";
-import { PrismaPg } from '@prisma/adapter-pg'
+import { Prisma, PrismaClient } from '../src/generated/prisma/client.js';
+import { prisma } from '../src/lib/prisma.js'
 import fs from 'fs';
 import path from 'path'
 import { fileURLToPath } from 'url';
@@ -8,10 +8,6 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const connectionString = `${process.env.DATABASE_URL}`
-
-const adapter = new PrismaPg({connectionString})
-const prisma = new PrismaClient({adapter});
 
 function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));

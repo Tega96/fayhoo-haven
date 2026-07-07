@@ -23,9 +23,9 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors());
 
 /** ROUTES */
-app.use('/managers', authMiddleware(["manager"]), managerRoutes)
+// app.use('/managers', authMiddleware(["manager"]), managerRoutes)
 app.use('/tenants', authMiddleware(["tenant"]), tenantRoutes);
-app.use('/', propertyRouter)
+// app.use('/', propertyRouter)
 
 app.get('/', (req, res) => {
     res.send("This is home route")

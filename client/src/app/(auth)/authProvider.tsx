@@ -18,9 +18,9 @@ const components = {
     Header () {
         return (
             <View className="mt-4 mb-7">
-                <Heading level={3} className="!text-2xl !font-bold">
+                <Heading level={3} className="text-2xl font-bold">
                     Fa
-                    <span className="text-secondary-500 font-light hover:!text-primary-300">
+                    <span className="text-secondary-500 font-light hover:text-primary-300">
                         Yhoo
                     </span>
                 </Heading>

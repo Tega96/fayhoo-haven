@@ -69,10 +69,12 @@ export const getCurrentResidence = async (req: Request, res: Response): Promise<
     try {
         const { cognitoId } = req.params;
         const properties = await prisma.property.findMany({
-            where: (tenenats: {some: {cognitoId }}),
+            where: (tenenats: {some: {cognitoId }},
+
             include: {
                 location: true,
             }
+            )
         });
 
         const residencesWithFormattedLocation = await Promise.all(

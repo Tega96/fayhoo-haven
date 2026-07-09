@@ -4,3 +4,23 @@ import { twMerge } from "tailwind-merge"
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
+
+export const createNewUserInDatabase = async (user: any, idToken: any, userRole: string, fetchWithBQ: any) => {
+  const createEndpoint = userRole?.toLowerCase() === "manager" ? "/manager" : "/tenant";
+  console.log("userRole:", userRole)
+
+  const createUserResponse = await fetchWithBQ({
+    url: createEndpoint,
+    method: 'Post',
+    body: {
+      cognitoId: user.userId,
+      name: user.username,
+      email: idToken.payload?.email || "",
+      phoneNumber: "",
+    }
+  });
+
+  if (createUserResponse.error) {
+    throw new Error("Failed to create user record")
+  }
+}
